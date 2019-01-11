@@ -29,10 +29,8 @@ def findModuleFolders() :
     #directories = filter(os.path.isdir, os.listdir('.'))
     allSubdirectories = os.walk(".", topdown=True)
     print type(allSubdirectories)
-
     customModuleFolderPaths=[]
     profileFolderPaths=[]
-    #This is going to take a long time to scan ALL the folders in bcb/Uniview
     for root, directories, files in allSubdirectories:
         for name in directories:
             if name.lower()=='custom modules':
