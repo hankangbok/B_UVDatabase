@@ -6,6 +6,7 @@ import unittest
 
 CustomModulesFolderPath = '..\..\custom modules'
 
+#TODO Delete this
 #Generates a CSV table with the module names and empty columns otherwise
 def getCustomModulesList():
     resultFile=open("CustomModulesList.csv","w+")
@@ -21,22 +22,70 @@ def getCustomModulesList():
     resultFile.close()
     print "A CSV table with 4 columns has been created.\n"
     print "You can find it in this directory as - CustomModulesList.csv\n"
-#Should find all folders named 'custom_modules'
+def notEmpty(aPath):
+    return len(os.listdir(aPath))>0
+
+def writeModuleFoldersToDict(CMFolderPaths):
+    #Open a csv file for writing. 
+    #resultFiles = open("ModulesList.csv","w+")
+    #resultFile.write("assetfolder,modulename,source,profiles/n")
+    masterDict = {}
+#For each folder path    
+#Check that the folder is not empty, contains dirs
+    CMFolderPaths = filter(notEmpty,CMFolderPaths)
+#For remaining 'custom modules' folders, get the folder names inside them (module titles)
+    for folderpath in CMFolderPaths:
+#Lists out the module folders in a given 'custom modules' folder
+        subdirs = os.listdir(folderpath)
+        modulePaths = [folder for folder in subdirs if os.path.isdir(os.path.join(folderpath, folder))]
+        #modulePaths = filter(os.path.isdir(os.path.join(folderpath,x)), os.listdir(folderpath))
+        print modulePaths
+#Upate the master dictionary with the folder name
+        {masterDict.update({moduleName:''}) for moduleName in modulePaths}
+        print folderpath, masterDict, '\n\n', len(masterDict)
+
+    #write each item in master dict as a line to the  csv file
+    #return the final dictionary (Now you can start adding profiles in getProfiles()
+    
+#Should find all folders named 'custom_modules' 
 def findModuleFolders() :
     #NOTE: Change this to UniviewFolderPath='../../' for real implementation
-    UniviewFolderPath = '../../../'
+    UniviewFolderPath = '../../'
     os.chdir(UniviewFolderPath)
     #directories = filter(os.path.isdir, os.listdir('.'))
+    print "scanning for custom module and profiles folders now"
     allSubdirectories = os.walk(".", topdown=True)
     print type(allSubdirectories)
     customModuleFolderPaths=[]
     profileFolderPaths=[]
+    count=0
     for root, directories, files in allSubdirectories:
         for name in directories:
             if name.lower()=='custom modules':
                 customModuleFolderPaths.append(os.path.join(root,name))
-            if name.lower()=='profiles':
-                profileFolderPaths.append(os.path.join(root,name))
+                print root, name
+                count+=1
+            if count==5:
+                break
+        if count==5:
+            print "returned a list of  5 folders named 'custom modules'"
+            #return customModuleFolderPaths
+            break
+    writeModuleFoldersToDict(customModuleFolderPaths)
+    #i=0
+    #while i<5:
+    #    print allSubdirectories[1][i]
+    #    i+=1
+
+    #for root, directories, files in allSubdirectories:
+        #print something
+        #for name in directories:
+            #if name.lower()=='custom modules':
+            #    customModuleFolderPaths.append(os.path.join(root,name))
+            #    print os.path.join(root,name)
+            #if name.lower()=='profiles':
+            #    profileFolderPaths.append(os.path.join(root,name))
+            #    print root
     #a list of all folders with custom modules
     print customModuleFolderPaths
     #a list of all folders name 'profiles'
@@ -54,7 +103,7 @@ def findModuleFolders() :
     #Check for modules with description.html
     #Strip the module name if available, add to csv column (matching by folder name as key)
 findModuleFolders()
-
+    
 
 #Should get the profiles where modules were used.
 #def getProfiles():
