@@ -6,8 +6,8 @@ import unittest
 
 CustomModulesFolderPath = '..\..\custom modules'
 
-#TODO Delete this
 #Generates a CSV table with the module names and empty columns otherwise
+"""
 def getCustomModulesList():
     resultFile=open("CustomModulesList.csv","w+")
     #Put the headers in this write statement.
@@ -24,6 +24,7 @@ def getCustomModulesList():
     print "You can find it in this directory as - CustomModulesList.csv\n"
 def notEmpty(aPath):
     return len(os.listdir(aPath))>0
+"""
 
 def writeModuleFoldersToDict(CMFolderPaths):
     #Open a csv file for writing. 
@@ -38,16 +39,21 @@ def writeModuleFoldersToDict(CMFolderPaths):
 #Lists out the module folders in a given 'custom modules' folder
         subdirs = os.listdir(folderpath)
         modulePaths = [folder for folder in subdirs if os.path.isdir(os.path.join(folderpath, folder))]
-        #modulePaths = filter(os.path.isdir(os.path.join(folderpath,x)), os.listdir(folderpath))
+        
         print modulePaths
 #Upate the master dictionary with the folder name
         {masterDict.update({moduleName:''}) for moduleName in modulePaths}
+
         print folderpath, masterDict, '\n\n', len(masterDict)
 
     #write each item in master dict as a line to the  csv file
     #return the final dictionary (Now you can start adding profiles in getProfiles()
-    
+"""
+#Walk through bcb/Uniview and
+#look for all folders called 'custom modules'
+#Create [] of such folder paths 
 #Should find all folders named 'custom_modules' 
+"""
 def findModuleFolders() :
     #NOTE: Change this to UniviewFolderPath='../../' for real implementation
     UniviewFolderPath = '../../'
@@ -65,6 +71,7 @@ def findModuleFolders() :
                 customModuleFolderPaths.append(os.path.join(root,name))
                 print root, name
                 count+=1
+#Only testing over 5 directories for now. bcb total scan takes too long
             if count==5:
                 break
         if count==5:
@@ -76,7 +83,7 @@ def findModuleFolders() :
     #while i<5:
     #    print allSubdirectories[1][i]
     #    i+=1
-
+#TODO: put this back in to run over the entire directory
     #for root, directories, files in allSubdirectories:
         #print something
         #for name in directories:
@@ -91,9 +98,6 @@ def findModuleFolders() :
     #a list of all folders name 'profiles'
     print profileFolderPaths
     
-    #Walk through bcb/Uniview and
-    #look for all folders called 'custom modules'
-    #Create [] of such folder paths
 
     #For each folder path in [],
     #Get the module folder name,
